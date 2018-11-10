@@ -1,14 +1,12 @@
 # Source biocLite, which is used to install Bioconductor packages in R
 source("https://bioconductor.org/biocLite.R")
-# Install the edgeR package
+
+# Install and load the edgeR package
 biocLite("edgeR")
-# Load the edgeR package
 library(edgeR)
-# Source biocLite, which is used to install Bioconductor packages in R
-source("https://bioconductor.org/biocLite.R")
-# Install the tweeDEseqCountData package
+
+# Install and load the tweeDEseqCountD package
 biocLite("tweeDEseqCountData")
-# Load the tweeDEseqCountData package
 library(tweeDEseqCountData)
 
 #Load the data from the pickrell1 dataset
