@@ -2,11 +2,11 @@
 source("https://bioconductor.org/biocLite.R")
 
 # Install and load the edgeR package
-biocLite("edgeR")
+#biocLite("edgeR")
 library(edgeR)
 
 # Install and load the tweeDEseqCountD package
-biocLite("tweeDEseqCountData")
+#biocLite("tweeDEseqCountData")
 library(tweeDEseqCountData)
 
 #Load the data from the pickrell1 dataset
@@ -38,14 +38,14 @@ hasannot <- rowSums(is.na(y$genes))==0
 y <- y[isexpr & hasannot, , keep.lib.sizes=FALSE]
 
 # Check libsize for the two genders using a boxplot 
-boxplot(split(log10(y$samples$lib.size),Gender),main="log10 library size")
+boxplot(split(log10(y$samples$lib.size),Gender),main="Gender Based Library Size Comparison for Pickrell1", ylab="log10 library size")
 
 # Compare mean-var relationship at gene-level relative to Poisson
 gene.mean <- apply(y$count,1,mean)
 CV.sq <- apply(y$count,1,var)/gene.mean^2
 
 # Plot CV
-plot(log(gene.mean), log(CV.sq),cex=0.3,col="grey",ylim=c(-5,3))
+plot(log(gene.mean), log(CV.sq),cex=0.3,col="grey",ylim=c(-5,3), main="Mean-Variance Relationship for Pickrell1 Dataset Compared to Poisson")
 
 # Add predicted CV.sq under Poisson (do you know why under Poisson model the slope is -1?
 abline(c(0,-1))
@@ -61,7 +61,7 @@ norm.y <- y$count %*% diag(1/eff.sf)
 # Compare mean-var relationship at gene-level relative to Poisson
 gene.mean <- apply(norm.y,1,mean)
 CV.sq <- apply(norm.y,1,var)/gene.mean^2
-plot(log(gene.mean), log(CV.sq),cex=0.3,col="grey",ylim=c(-5,3))
+plot(log(gene.mean), log(CV.sq),cex=0.3,col="grey",ylim=c(-5,3), main="Normalized Mean-Variance Relationship for Pickrell1 Dataset Compared to Poisson")
 
 # Add predicted CV.sq under Poisson 
 abline(c(0,-1))
