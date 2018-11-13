@@ -1,21 +1,27 @@
+# In this analysis, the pickrell1 rna-seq dataset from a study on RNA sequencing by Joseph Pickrell et al. The dataset will be analyzed based on stratification by gender, and an analysis of the relationship between mean and variance for expression will also be conducted. The distribution of the mean and variance for expression data will be compared to the poisson distribution. 
+
+# We can begin by loading the dataset and some necessary libraries.
+
 # Source biocLite, which is used to install Bioconductor packages in R
 source("https://bioconductor.org/biocLite.R")
 
 # Install and load the edgeR package
-#biocLite("edgeR")
+  
+# biocLite("edgeR")
 library(edgeR)
 
 # Install and load the tweeDEseqCountD package
-#biocLite("tweeDEseqCountData")
+
+# biocLite("tweeDEseqCountData")
 library(tweeDEseqCountData)
 
-#Load the data from the pickrell1 dataset
+# Load the rna-seq data from the pickrell1 dataset
 data(pickrell1)
 
 # Create object 'Counts' to hold read count information
 Counts <- exprs(pickrell1.eset)
 
-# Define the variable of interest
+# Define and extract the variable of interest, which is gender
 Gender <- pickrell1.eset$gender
 
 # Prepare and extract annotation information that will contain genes names to be used later as part of the DGEList below.
@@ -25,16 +31,16 @@ annot <- annotEnsembl63[,c("Symbol","Chr")]
 # Remove object
 rm(annotEnsembl63)
 
-#Create DGEList object and add the read counts and annotations
+# Create DGEList object and add the read counts and annotations
 y <- DGEList(counts=Counts, genes=annot[rownames(Counts),])
 
-# define genes with high enough expression levels. Here we define it to be genes with more than 1 cpm (count per million reads) in at least 20 samples
+# Define genes with high enough expression levels. Here we define it to be genes with more than 1 cpm (count per million reads) in at least 20 samples
 isexpr <- rowSums(cpm(y)>1) >= 20
 
-# define whether genes have annotated functions
+# Define whether genes have annotated functions
 hasannot <- rowSums(is.na(y$genes))==0
 
-# pick only genes with high enough expression AND has annotated functions
+# Pick only genes with high enough expression AND having annotated functions
 y <- y[isexpr & hasannot, , keep.lib.sizes=FALSE]
 
 # Check libsize for the two genders using a boxplot 
@@ -53,7 +59,7 @@ abline(c(0,-1))
 # First calculate relative NORMALIZATION factors (using default method)
 y <- calcNormFactors(y)
 
-# Obtain normalized count
+# Obtain normalized counts for expression
 sf <- colSums(y$count); sf <- sf/mean(sf)
 eff.sf <- sf*y$samples$norm.factors
 norm.y <- y$count %*% diag(1/eff.sf)
