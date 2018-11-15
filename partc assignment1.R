@@ -24,11 +24,11 @@ Counts <- exprs(pickrell1.eset)
 # Define and extract the variable of interest, which is gender
 Gender <- pickrell1.eset$gender
 
-# Prepare and extract annotation information that will contain genes names to be used later as part of the DGEList below.
+# Prepare and extract annotation information that will contain genes names to be used later as part of the DGEList below
 data(annotEnsembl63)
 annot <- annotEnsembl63[,c("Symbol","Chr")]
 
-# Remove object
+# Remove annotation ensembl object
 rm(annotEnsembl63)
 
 # Create DGEList object and add the read counts and annotations
@@ -46,8 +46,10 @@ y <- y[isexpr & hasannot, , keep.lib.sizes=FALSE]
 # Check libsize for the two genders using a boxplot 
 boxplot(split(log10(y$samples$lib.size),Gender),main="Gender Based Library Size Comparison for Pickrell1", ylab="log10 library size")
 
+#From the library size comparison, we can see that the sizes are roughly the same for males and females, except that females have somewhat significantly greater number of smaller library sizes. 
+
 # We want to compare mean-var relationship at gene-level relative to Poisson
-# First lets get the mean and coefficient of variation values 
+# First let's get the mean and coefficient of variation values 
 gene.mean <- apply(y$count,1,mean)
 CV.sq <- apply(y$count,1,var)/gene.mean^2
 
@@ -85,4 +87,6 @@ abline(c(0,-1),col='blue')
 
 # There is quite a difference in the slope of the actual regression line for the mean-var relationship after normalization of the read counts. The slope (from the red regression line), seems to increase as compared to before normalization, and is therefore not as well represented by the Poisson model anymore. 
 
-##Any conclusions?
+# From this analysis, we can conclude that before normalization, the mean-variance relationship for the Pickrell1 rna-seq dataset was roughly approximated by the Poisson distribution. However, after normalization of the counts, we can see that the mean-var relationship became skewed. The y-intercept for the mean-var relationship regression line increased as compared to before, indicating that overall variance may have increased after normalization.
+
+# Further analysis would involve a more thorough investigation of the relationship, such as quantitatively comparing the slopes to determine the difference. Also other commonly used distributions can be compared to the rna-seq data, such as the negative binomial distribution. The data also looked to be severely affected by outlier, so another aspect of analysis could involve removing outliers, or normalizing their values using some sort of 'fencing' technique. 
