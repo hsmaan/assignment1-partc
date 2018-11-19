@@ -1,3 +1,5 @@
+# Primary Author - Mounika Kalluri. Secondary Contributor - Hassaan Maan. 
+
 # In this analysis, the pickrell1 rna-seq dataset from a study on RNA sequencing by Joseph Pickrell et al. The dataset will be analyzed based on stratification by gender, and an analysis of the relationship between mean and variance for expression will also be conducted. The distribution of the mean and variance for expression data will be compared to the Poisson distribution. 
 
 # We can begin by loading the dataset and some necessary libraries.
